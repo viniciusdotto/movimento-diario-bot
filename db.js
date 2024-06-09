@@ -1,10 +1,14 @@
+import sequelize from './sequelize.js';
+
+// Classes principais
 import User from './models/user.js';
 import Equipment from './models/equipment.js';
 import Exercise from './models/exercise.js';
 import Workout from './models/workout.js';
 import Repetition from './models/repetition.js';
 
-import sequelize from './sequelize.js';
+// Associações m x n
+import './models/userEquipment.js';
 
 class Database {
   async init() {
