@@ -2,6 +2,23 @@ import express from 'express';
 import TelegramBot from 'node-telegram-bot-api';
 import 'dotenv/config'
 
+import sequelize from './sequelize.js';
+import User from './models/user.js';
+
+(async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('Connection has been established successfully.');
+
+    // Sync all models
+    await sequelize.sync({ force: true });  // Use { force: true } to drop and recreate the tables for development
+    console.log('All models were synchronized successfully.');
+
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+  }
+})();
+
 const token = process.env.API_TOKEN;
 const bot = new TelegramBot(token, { polling: true });
 
