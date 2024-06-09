@@ -11,11 +11,11 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  diasDeTreino: {
+  weeklyTrainingDays: {
     type: DataTypes.INTEGER,
     allowNull: true,
   },
-  tempoDeTreino: {
+  workoutDuration: {
     type: DataTypes.INTEGER,
     allowNull: true,
   },
