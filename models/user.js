@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../sequelize.js';
 
-const User = sequelize.define('User', {
+const User = sequelize.define('users', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -11,11 +11,11 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  weeklyTrainingDays: {
+  weekly_training_days: {
     type: DataTypes.INTEGER,
     allowNull: true,
   },
-  workoutDuration: {
+  workout_duration: {
     type: DataTypes.INTEGER,
     allowNull: true,
   },

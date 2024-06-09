@@ -4,6 +4,8 @@ import 'dotenv/config'
 
 import sequelize from './sequelize.js';
 import User from './models/user.js';
+import Equipment from './models/equipment.js';
+import './models/userEquipment.js'
 
 (async () => {
   try {
