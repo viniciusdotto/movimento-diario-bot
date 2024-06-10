@@ -1,18 +1,6 @@
-import 'dotenv/config';
-import express from 'express';
-import TelegramBot from 'node-telegram-bot-api';
-import Database from './db.js';
-import UsersController from './controllers/usersController.js';
+import UsersController from '../controllers/usersController.js';
 
-// Inicia o bot
-const token = process.env.API_TOKEN;
-const bot = new TelegramBot(token, { polling: true });
-
-// Inicia o banco
-const db = new Database();
-db.init();
-
-bot.on('message', async (msg) => {
+export async function handleMessage(bot, msg) {
   const chatId = msg.chat.id;
 
   try {
@@ -44,10 +32,9 @@ bot.on('message', async (msg) => {
     console.error('Error handling message:', error);
     bot.sendMessage(chatId, 'Ocorreu um erro ao processar sua mensagem.');
   }
-});
+}
 
-
-bot.on('callback_query', (callbackQuery) => {
+export function handleCallbackQuery(bot, callbackQuery) {
   const msg = callbackQuery.message;
   const chatId = msg.chat.id;
   const data = callbackQuery.data;
@@ -70,16 +57,8 @@ bot.on('callback_query', (callbackQuery) => {
 
   bot.sendMessage(chatId, response);
   bot.answerCallbackQuery(callbackQuery.id);
-});
+}
 
-bot.on('polling_error', (error) => {
+export function handlePollingError(error) {
   console.error(`[polling_error] ${error.code}: ${error.message}`);
-});
-
-//Inicia API
-const app = express();
-app.use(express.json());
-
-app.listen(3000, () => {
-  console.log("API Started!");
-});
+}
