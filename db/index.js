@@ -13,7 +13,7 @@ class Database {
       console.log('Connection has been established successfully.');
 
       // Sync all models
-      await sequelize.sync({ force: true });  // Use { force: true } to drop and recreate the tables for development
+      await sequelize.sync({ force: false });  // Use { force: true } to drop and recreate the tables for development
       console.log('All models were synchronized successfully.');
 
     } catch (error) {

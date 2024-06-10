@@ -9,3 +9,4 @@ bot.on('callback_query', (callbackQuery) => handleCallbackQuery(bot, callbackQue
 bot.on('polling_error', handlePollingError);
 
 export default bot;
+export { bot };  // Exporta bot para usar em conversationHandlers.js

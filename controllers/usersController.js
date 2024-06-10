@@ -11,7 +11,6 @@ async function show(username) {
 
 async function create(username) {
   try {
-    console.log('entrou')
     const newUser = await User.create({ username: username });
     console.log('New user created:', newUser.toJSON());
   } catch(err) {
@@ -19,4 +18,13 @@ async function create(username) {
   }
 }
 
-export default { show, create };
+async function update(user, params) {
+  try {
+    await user.update(params);
+    console.log('User updated');
+  } catch(err) {
+    console.log(err);
+  }
+}
+
+export default { show, create, update };

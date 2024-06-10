@@ -1,4 +1,5 @@
 import UsersController from '../controllers/usersController.js';
+import { startWorkoutFlow, handleCurrentWorkout, handleNewWorkout, handleWorkoutDuration } from './conversationHandlers.js';
 
 export async function handleMessage(bot, msg) {
   const chatId = msg.chat.id;
@@ -12,51 +13,69 @@ export async function handleMessage(bot, msg) {
 
     const welcomeMessage = `Olá ${user.username}, bem-vindo ao Movimento Diário, seu gerador de treinos e periodizações! Como posso te ajudar?`;
 
-    if (msg.text === '/quit') {
-      bot.sendMessage(chatId, 'Volte sempre, se precisar de algo só mandar uma mensagem');
-      return;
-    }
+    await bot.sendMessage(chatId, welcomeMessage);
+    await startWorkoutFlow(chatId);  // Initiate the workout flow options
 
-    const options = {
-      reply_markup: {
-        inline_keyboard: [
-          [{ text: 'Treino de Hoje', callback_data: 'currentWorkout' }],
-          [{ text: 'Gerar Novo Treino', callback_data: 'newWorkout' }],
-          [{ text: 'Sair', callback_data: '/quit' }]
-        ]
-      }
-    };
-
-    bot.sendMessage(chatId, welcomeMessage, options);
   } catch (error) {
     console.error('Error handling message:', error);
     bot.sendMessage(chatId, 'Ocorreu um erro ao processar sua mensagem.');
   }
 }
 
-export function handleCallbackQuery(bot, callbackQuery) {
-  const msg = callbackQuery.message;
-  const chatId = msg.chat.id;
-  const data = callbackQuery.data;
-
-  let response;
-
-  switch (data) {
-    case 'currentWorkout':
-      response = 'O seu treino de hoje é: ...';
-      break;
-    case 'newWorkout':
-      response = 'Para gerar o novo treino, preciso que você responda algumas perguntas...';
-      break;
-    case '/quit':
-      response = 'Volte sempre, se precisar de algo só mandar uma mensagem';
-      break;
-    default:
-      response = 'Por favor, escolha uma opção válida.';
+export async function handleCallbackQuery(bot, callbackQuery) {
+  try {
+    const msg = callbackQuery.message;
+    const chatId = msg.chat.id;
+    const data = callbackQuery.data;
+    const user = await UsersController.show(msg.chat.username);
+    switch (data) {
+      case 'currentWorkout':
+        handleCurrentWorkout(chatId);
+        break;
+      case 'newWorkout':
+        handleNewWorkout(chatId);
+        break;
+      case '3':
+        UsersController.update(user, { weekly_training_days: 3 });
+        handleWorkoutDuration(chatId);
+        break;
+      case '4':
+        UsersController.update(user, { weekly_training_days: 4 });
+        handleWorkoutDuration(chatId);
+        break;
+      case '5':
+        UsersController.update(user, { weekly_training_days: 5 });
+        handleWorkoutDuration(chatId);
+        break;
+      case '6':
+        UsersController.update(user, { weekly_training_days: 6 });
+        handleWorkoutDuration(chatId);
+        break;
+      case '45':
+        UsersController.update(user, { workout_duration: 45 });
+        handleCurrentWorkout(chatId);
+        break;
+      case '60':
+        UsersController.update(user, { workout_duration: 60 });
+        handleCurrentWorkout(chatId);
+        break;
+      case '90':
+        UsersController.update(user, { workout_duration: 90 });
+        handleCurrentWorkout(chatId);
+        break;
+      case 'startWorkoutFlow':
+        startWorkoutFlow(chatId);
+        break;
+      case '/quit':
+        bot.sendMessage(chatId, 'Volte sempre, se precisar de algo só mandar uma mensagem');
+        break;
+      default:
+        bot.sendMessage(chatId, 'Por favor, escolha uma opção válida.');
+    }
+    bot.answerCallbackQuery(callbackQuery.id);
+  } catch (err) {
+    console.log(err);
   }
-
-  bot.sendMessage(chatId, response);
-  bot.answerCallbackQuery(callbackQuery.id);
 }
 
 export function handlePollingError(error) {
