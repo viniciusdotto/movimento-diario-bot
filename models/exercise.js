@@ -14,7 +14,7 @@ const Exercise = sequelize.define('exercises', {
   },
   exercise_type: {
     type: DataTypes.ENUM,
-    values: ['SUP PULL', 'SUP PUSH', 'INF PULL', 'INF PUSH'],
+    values: ['SUP PULL HOR', 'SUP PULL VER', 'SUP PUSH HOR', 'SUP PUSH VER', 'INF PULL', 'INF PUSH'],
     allowNull: true,
   },
   easier_exercise: {
@@ -40,6 +40,10 @@ const Exercise = sequelize.define('exercises', {
       model: Equipment,
       key: 'id'
     }
+  },
+  has_load: {
+    type: DataTypes.BOOLEAN,
+    allowNull: true
   },
 }, {
   timestamps: true,

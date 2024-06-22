@@ -14,7 +14,7 @@ export async function handleMessage(bot, msg) {
     const welcomeMessage = `Olá ${user.username}, bem-vindo ao Movimento Diário, seu gerador de treinos e periodizações! Como posso te ajudar?`;
 
     await bot.sendMessage(chatId, welcomeMessage);
-    await startWorkoutFlow(chatId);  // Initiate the workout flow options
+    await startWorkoutFlow(chatId);
 
   } catch (error) {
     console.error('Error handling message:', error);
