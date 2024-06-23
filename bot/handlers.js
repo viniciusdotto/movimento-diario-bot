@@ -77,12 +77,21 @@ export async function handleCallbackQuery(bot, callbackQuery) {
         break;
       case 'easy':
         await WorkoutFeedbackController.create({ workout_id: workout.id, workout_feedback: 'EASY' });
+        await WorkoutController.updateDate(workout);
+        await WorkoutController.create(user);
+        startWorkoutFlow(chatId);        
         break;
       case 'normal':
         await WorkoutFeedbackController.create({ workout_id: workout.id, workout_feedback: 'NORMAL' });
+        await WorkoutController.updateDate(workout);
+        await WorkoutController.create(user);
+        startWorkoutFlow(chatId);        
         break;
       case 'hard':
-        await WorkoutFeedbackController.create({ workout_id: workout.id, workout_feedback: 'NORMAL' });
+        await WorkoutFeedbackController.create({ workout_id: workout.id, workout_feedback: 'HARD' });
+        await WorkoutController.updateDate(workout);
+        await WorkoutController.create(user);
+        startWorkoutFlow(chatId);        
         break;
       case 'workoutDone':
         handleWorkoutDone(chatId);
