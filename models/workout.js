@@ -10,7 +10,7 @@ const Workout = sequelize.define('workouts', {
   },
   workout_date: {
     type: DataTypes.DATE,
-    allowNull: false,
+    allowNull: true,
   },
   workout_type: {
     type: DataTypes.ENUM,

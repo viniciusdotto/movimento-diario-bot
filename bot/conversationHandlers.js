@@ -61,7 +61,7 @@ const handleWorkoutDuration = async (chatId) => {
   let options = {
     reply_markup: {
       inline_keyboard: [
-        [{ text: '45min', callback_data: 45 }],
+        [{ text: '30min', callback_data: 30 }],
         [{ text: '60min', callback_data: 60 }],
         [{ text: '90min', callback_data: 90 }]
       ]

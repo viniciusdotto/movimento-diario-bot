@@ -1,4 +1,5 @@
 import UsersController from '../controllers/usersController.js';
+import WorkoutController from '../controllers/workoutController.js';
 import { startWorkoutFlow, handleCurrentWorkout, handleNewWorkout, handleWorkoutDuration } from './conversationHandlers.js';
 
 export async function handleMessage(bot, msg) {
@@ -51,16 +52,22 @@ export async function handleCallbackQuery(bot, callbackQuery) {
         UsersController.update(user, { weekly_training_days: 6 });
         handleWorkoutDuration(chatId);
         break;
-      case '45':
-        UsersController.update(user, { workout_duration: 45 });
+      case '30':
+        UsersController.update(user, { workout_duration: 30 });
+        await WorkoutController.deleteAll();
+        await WorkoutController.create(user);
         handleCurrentWorkout(chatId);
         break;
       case '60':
         UsersController.update(user, { workout_duration: 60 });
+        await WorkoutController.deleteAll();
+        await WorkoutController.create(user);
         handleCurrentWorkout(chatId);
         break;
       case '90':
         UsersController.update(user, { workout_duration: 90 });
+        await WorkoutController.deleteAll();
+        await WorkoutController.create(user);
         handleCurrentWorkout(chatId);
         break;
       case 'startWorkoutFlow':
