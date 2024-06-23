@@ -1,9 +1,12 @@
 import Repetition from '../models/repetition.js';
 import Workout from '../models/workout.js';
 
-async function deleteAll() {
-  Repetition.destroy({ where: {} });
-  Workout.destroy({ where: {} });
+async function deleteAll(user) {
+  const workouts = await Workout.findAll( { where: { user_id: user.id }});
+  workouts.forEach( async workout => {
+    await Repetition.destroy({ where: { workout_id: workout.id } });
+  })
+  await Workout.destroy({ where: { user_id: user.id } });
 }
 
 async function create(user) {

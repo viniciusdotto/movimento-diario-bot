@@ -54,21 +54,24 @@ export async function handleCallbackQuery(bot, callbackQuery) {
         break;
       case '30':
         UsersController.update(user, { workout_duration: 30 });
-        await WorkoutController.deleteAll();
+        await WorkoutController.deleteAll(user);
         await WorkoutController.create(user);
-        handleCurrentWorkout(chatId);
+        bot.sendMessage(chatId, 'Treino criado com sucesso. Para começar hoje clique em "Treino de hoje"');
+        startWorkoutFlow(chatId);
         break;
       case '60':
         UsersController.update(user, { workout_duration: 60 });
-        await WorkoutController.deleteAll();
+        await WorkoutController.deleteAll(user);
         await WorkoutController.create(user);
-        handleCurrentWorkout(chatId);
+        bot.sendMessage(chatId, 'Treino criado com sucesso. Para começar hoje clique em "Treino de hoje"');
+        startWorkoutFlow(chatId);        
         break;
       case '90':
         UsersController.update(user, { workout_duration: 90 });
-        await WorkoutController.deleteAll();
+        await WorkoutController.deleteAll(user);
         await WorkoutController.create(user);
-        handleCurrentWorkout(chatId);
+        bot.sendMessage(chatId, 'Treino criado com sucesso. Para começar hoje clique em "Treino de hoje"');
+        startWorkoutFlow(chatId);        
         break;
       case 'startWorkoutFlow':
         startWorkoutFlow(chatId);
