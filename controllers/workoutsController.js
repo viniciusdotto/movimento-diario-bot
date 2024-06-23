@@ -191,4 +191,8 @@ async function create(user) {
   }
 }
 
-export default { deleteAll, create };
+async function show(user) {
+  return await Workout.findOne( { where: { user_id: user.id }, order: [['id', 'DESC']] });
+}
+
+export default { deleteAll, create, show };

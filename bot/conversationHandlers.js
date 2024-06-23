@@ -1,4 +1,7 @@
 import { bot } from './index.js';
+import WorkoutController from '../controllers/workoutsController.js';
+import RepetitionController from '../controllers/repetitionsController.js';
+import ExerciseController from '../controllers/exercisesController.js';
 
 const startWorkoutFlow = async (chatId) => {
   const options = {
@@ -13,15 +16,26 @@ const startWorkoutFlow = async (chatId) => {
   await bot.sendMessage(chatId, 'Escolha uma opção:', options);
 }
 
-const handleCurrentWorkout = async (chatId) => {
-  // TODO lógica de mostrar o treino atual
-  const response = 'O seu treino de hoje é: ...';
-  await bot.sendMessage(chatId, response);
+const handleCurrentWorkout = async (chatId, user) => {
+  const workout = await WorkoutController.show(user);
+  const repetitions = await RepetitionController.index(workout);
+  let workoutText = 'O seu treino de hoje é:\n\n';
+
+  const promises = repetitions.map(async (repetition) => {
+    const exercise = await ExerciseController.show(repetition.exercise_id);
+    workoutText += `${exercise.name} - ${repetition.total_reps} repetições dividadas em ${Math.ceil(repetition.total_reps / 12)} série(s)\n`;
+  });
+
+  await Promise.all(promises);
+
+  workoutText += '\nDescanse entre cada série de 1min e meio a 2min'
+
+  await bot.sendMessage(chatId, workoutText);
 
   const options = {
     reply_markup: {
       inline_keyboard: [
-        [{ text: 'Treino de Hoje', callback_data: 'currentWorkout' }],
+        [{ text: 'Concluir Treino', callback_data: 'workoutDone' }],
         [{ text: 'Gerar Novo Treino', callback_data: 'newWorkout' }],
         [{ text: 'Sair', callback_data: '/quit' }]
       ]

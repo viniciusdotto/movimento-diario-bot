@@ -1,5 +1,5 @@
 import UsersController from '../controllers/usersController.js';
-import WorkoutController from '../controllers/workoutController.js';
+import WorkoutController from '../controllers/workoutsController.js';
 import { startWorkoutFlow, handleCurrentWorkout, handleNewWorkout, handleWorkoutDuration } from './conversationHandlers.js';
 
 export async function handleMessage(bot, msg) {
@@ -31,7 +31,7 @@ export async function handleCallbackQuery(bot, callbackQuery) {
     const user = await UsersController.show(msg.chat.username);
     switch (data) {
       case 'currentWorkout':
-        handleCurrentWorkout(chatId);
+        handleCurrentWorkout(chatId, user);
         break;
       case 'newWorkout':
         handleNewWorkout(chatId);
