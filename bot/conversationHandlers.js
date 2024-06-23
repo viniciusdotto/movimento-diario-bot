@@ -84,11 +84,28 @@ const handleWorkoutDuration = async (chatId) => {
   await bot.sendMessage(chatId, 'Escolha uma opção para continuar:', options);
 }
 
+const handleWorkoutDone = async (chatId) => {
+  const response = 'O que achou do treino?';
+  await bot.sendMessage(chatId, response);
+
+  let options = {
+    reply_markup: {
+      inline_keyboard: [
+        [{ text: 'Fácil', callback_data: 'easy' }],
+        [{ text: 'Na medida', callback_data: 'normal' }],
+        [{ text: 'Não Concluí', callback_data: 'hard' }]
+      ]
+    }
+  };
+  await bot.sendMessage(chatId, 'Escolha uma opção para continuar:', options);
+}
+
 // TODO lógica de seleção de equipamentos disponiveis (manter simples na primeira versao)
 
 export {
   startWorkoutFlow,
   handleCurrentWorkout,
   handleNewWorkout,
-  handleWorkoutDuration
+  handleWorkoutDuration,
+  handleWorkoutDone,
 };

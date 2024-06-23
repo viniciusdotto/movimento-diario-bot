@@ -1,6 +1,7 @@
 import UsersController from '../controllers/usersController.js';
 import WorkoutController from '../controllers/workoutsController.js';
-import { startWorkoutFlow, handleCurrentWorkout, handleNewWorkout, handleWorkoutDuration } from './conversationHandlers.js';
+import WorkoutFeedbackController from '../controllers/workoutFeedbackControllers.js'
+import { startWorkoutFlow, handleCurrentWorkout, handleNewWorkout, handleWorkoutDuration, handleWorkoutDone } from './conversationHandlers.js';
 
 export async function handleMessage(bot, msg) {
   const chatId = msg.chat.id;
@@ -29,6 +30,7 @@ export async function handleCallbackQuery(bot, callbackQuery) {
     const chatId = msg.chat.id;
     const data = callbackQuery.data;
     const user = await UsersController.show(msg.chat.username);
+    const workout = await WorkoutController.show(user);
     switch (data) {
       case 'currentWorkout':
         handleCurrentWorkout(chatId, user);
@@ -72,6 +74,18 @@ export async function handleCallbackQuery(bot, callbackQuery) {
         await WorkoutController.create(user);
         bot.sendMessage(chatId, 'Treino criado com sucesso. Para começar hoje clique em "Treino de hoje"');
         startWorkoutFlow(chatId);        
+        break;
+      case 'easy':
+        await WorkoutFeedbackController.create({ workout_id: workout.id, workout_feedback: 'EASY' });
+        break;
+      case 'normal':
+        await WorkoutFeedbackController.create({ workout_id: workout.id, workout_feedback: 'NORMAL' });
+        break;
+      case 'hard':
+        await WorkoutFeedbackController.create({ workout_id: workout.id, workout_feedback: 'NORMAL' });
+        break;
+      case 'workoutDone':
+        handleWorkoutDone(chatId);
         break;
       case 'startWorkoutFlow':
         startWorkoutFlow(chatId);
